@@ -10,7 +10,7 @@ uniform sampler2D ourTexture;
 void main()
 {
     // FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-    FragColor = texture(ourTexture, TexCoord);
+    FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0);
     // 使用GLSL内建的texture函数来采样纹理颜色
     // 第一个参数为纹理采样器
     // 第二个参数为相应的纹理坐标
