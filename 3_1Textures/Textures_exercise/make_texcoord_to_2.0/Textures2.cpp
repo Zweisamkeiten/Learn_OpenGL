@@ -3,12 +3,12 @@
 // 让其只包含相关的函数定义源码
 // 等于是将这个头文件变为一个cpp文件
 // 现只需在程序中包含 stb_image.h 并编译就可以了
-#include "../stb_image.h"
+#include "../../../stb_image.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "../shader_s.h"
+#include "../../../shader_s.h"
 
 using namespace std;
 void processInput(GLFWwindow *window);
@@ -119,7 +119,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int width, height, nrChannels;
-    unsigned char *data = stbi_load("../container.jpg", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("../../container.jpg", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -134,8 +134,8 @@ int main()
 
     glGenTextures(1, &texture2);
     glBindTexture(GL_TEXTURE_2D, texture2);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // 第一次执行发现笑脸上下颠倒了
@@ -144,7 +144,7 @@ int main()
     // 只要加入下面的语句就能使用stb_image.h帮助翻转y轴
     // 在加载图像之前
     stbi_set_flip_vertically_on_load(true);
-    data = stbi_load("../awesomeface.png", &width, &height, &nrChannels, 0);
+    data = stbi_load("../../awesomeface.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         // png格式使用rgba

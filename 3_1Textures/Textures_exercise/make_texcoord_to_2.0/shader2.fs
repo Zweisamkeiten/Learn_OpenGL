@@ -13,7 +13,7 @@ uniform sampler2D texture2;
 void main()
 {
     // FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0);
-    FragColor = mix(texture(texture1, vec2(-TexCoord.x, TexCoord.y)), texture(texture2, vec2(-TexCoord.x, TexCoord.y)), 0.2);
+    FragColor = mix(texture(texture1, vec2(TexCoord.x, TexCoord.y)), texture(texture2, vec2(TexCoord.x, TexCoord.y)), 0.2);
     // 最终的输出颜色现在是两个纹理的结合
     // GLSL内建的mix函数需要接受两个值
     // 并对它们根据第三个参数进行线性插值
