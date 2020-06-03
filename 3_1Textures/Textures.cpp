@@ -3,12 +3,12 @@
 // 让其只包含相关的函数定义源码
 // 等于是将这个头文件变为一个cpp文件
 // 现只需在程序中包含 stb_image.h 并编译就可以了
-#include "../stb_image.h"
+#include <shader_s.h>
+#include <stb_image.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-#include "../shader_s.h"
 
 using namespace std;
 void processInput(GLFWwindow *window);
