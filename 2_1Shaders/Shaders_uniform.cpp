@@ -150,6 +150,7 @@ int main()
         glUseProgram(shaderProgram);
         float timeValue = glfwGetTime();
         // 通过glfwwGetTime()获取运行的秒数
+        std::cout << timeValue << std::endl;
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
         // 使用sin函数让颜色在0.0到1.0之间改变
         // 最后将结果储存到greenValue中
