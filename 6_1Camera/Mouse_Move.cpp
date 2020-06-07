@@ -23,7 +23,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "shader_s.h"
+#include "shader_m.h"
 
 using namespace std;
 void processInput(GLFWwindow *window);
@@ -267,11 +267,13 @@ int main()
         // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
         view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
         projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        int viewLoc = glGetUniformLocation(ourShader.ID, "view");
-        int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
+//        int viewLoc = glGetUniformLocation(ourShader.ID, "view");
+//        int projectionLoc = glGetUniformLocation(ourShader.ID, "projection");
 
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &projection[0][0]);
+        // glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+        // glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, &projection[0][0]);
+        ourShader.setMat4("view", view);
+        ourShader.setMat4("projection", projection);
 
         glBindVertexArray(VAO);
         for(int i = 0; i < 10; i++)
@@ -314,6 +316,8 @@ void processInput(GLFWwindow *window)
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 {
+    // 可以使用一个bool变量检验
+    // 是否是第一次鼠标输入
     if (firstMouse)
     {
         lastX = xpos;
@@ -349,4 +353,10 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     front.y = sin(glm::radians(pitch));
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch)) ;
     cameraFront = glm::normalize(front);
+    // 现在运行代码，会发现窗口在第一次获取焦点的时候
+    // 摄像机会突然跳一下
+    // 原因是鼠标移动进窗口的一刻 鼠标回调函数就会被调用
+    // xpos和ypos会等于鼠标刚进入屏幕的位置
+    // 这通常是一个距离屏幕中心很远的位置
+    // 因而产生一个很大的偏移量
 }
