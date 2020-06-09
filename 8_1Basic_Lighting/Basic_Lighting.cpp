@@ -174,6 +174,7 @@ int main()
         CubeShader.setMat4("projection", projection);
         glm::mat4 view = camera.GetViewMatrix();
         CubeShader.setMat4("view", view);
+        CubeShader.setVec3("viewPos", camera.Position);
 
         
         glm::mat4 model = glm::mat4(1.0f);

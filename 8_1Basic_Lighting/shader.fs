@@ -12,6 +12,9 @@ out vec4 FragColor;
 uniform vec3 objectColor;
 uniform vec3 lightColor;
 uniform vec3 lightPos;
+uniform vec3 viewPos;
+// 使用摄像机对象的位置坐标作为观察者的世界空间坐标
+// 将相应的摄像机坐标传给片段着色器
 
 void main()
 {
@@ -30,7 +33,21 @@ void main()
 
     // vec3 result = ambient * objectColor;
     // 将环境光分量与漫反射分量相加 结果乘以物体颜色 获得片段最后的输出颜色
-    vec3 result = (ambient + diffuse) * objectColor;
+    float specularStrength = 0.5;
+    // 定义一个镜面强度变量 给镜面高光一个中等亮度颜色
+    // 如果设置为1.0f会得到一个非常亮的镜面光分量
+    // 计算视线方向向量 和对应沿着法线轴的反射向量
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    // 对lightDir向量取反 lightDir是片段指向光源，我们需要光源指向片段的向量，用reflect函数沿片段面法向量对称得到反射光线向量
+    //
+    // 计算镜面分量
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0f), 32);
+    // 计算视线方向与反射方向的点乘，确保其不为赋值 然后取其32次幂
+    // 32 为高光的反光度 物体的反光度越高，，反射光的能力越强，散射得越少，高光点就越小。
+    vec3 specular = specularStrength * spec * lightColor;
+    // 将镜面反射分量加入环境光和漫反射分量中
+    vec3 result = (ambient + diffuse + specular) * objectColor;
     FragColor = vec4(result, 1.0);
 }
 // 这个片段着色器从uniform变量中接受物体的颜色和光源的颜色
