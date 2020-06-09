@@ -142,7 +142,7 @@ int main()
         // 创建变换矩阵
         glm::mat4 trans = glm::mat4(1.0f);
         trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(1.0, 0.0, 0.0));
+        trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.0, 1.0, 0.0));
         // 使用GLFW的时间函数来获取不同时间的角度
         // 需要注意的是，虽然我们可以在任何地方声明变换矩阵
         // 但是现在必须在每一次迭代中创建它
