@@ -24,9 +24,9 @@ float deltaTime = 0.0f; // 当前帧与上一帧的时间差
 float lastFrame = 0.0f; // 上一帧的时间
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
+//glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f, 3.0f);
+//glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+//glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
 
 float pitch = 0.0f, yaw = -90.0f;
 bool firstMouse = true;
@@ -168,7 +168,10 @@ int main()
         CubeShader.setVec3("material.specular", 1.0f, 0.5f, 0.31f);
         CubeShader.setFloat("material.shininess", 32.0f);
         CubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-        CubeShader.setVec3("lightPos", lightPos);
+        CubeShader.setVec3("light.position", lightPos);
+        CubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+        CubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+        CubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
         // 光源是个静态变量
         // 更新uniform使用lightPos作为光源位置
 
