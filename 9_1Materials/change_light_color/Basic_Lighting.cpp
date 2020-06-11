@@ -174,17 +174,15 @@ int main()
         // 声明光源在场景中的世界空间坐标中的位置
 
         CubeShader.use();
-        //CubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        CubeShader.setVec3("material.ambient", ambientColor);
-        //CubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        CubeShader.setVec3("material.diffuse", diffuseColor);
+        CubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
+        CubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
         CubeShader.setVec3("material.specular", 1.0f, 0.5f, 0.31f);
         CubeShader.setFloat("material.shininess", 32.0f);
         //CubeShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 
         CubeShader.setVec3("light.position", lightPos);
-        CubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-        CubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+        CubeShader.setVec3("light.ambient", ambientColor);
+        CubeShader.setVec3("light.diffuse", diffuseColor);
         CubeShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
         // 光源是个静态变量
         // 更新uniform使用lightPos作为光源位置
