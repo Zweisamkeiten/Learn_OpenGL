@@ -129,31 +129,54 @@ int main()
     // 还需更新顶点属性指针
     // 只需改变步长即可
     //
-    unsigned int texture1;
-    glGenTextures(1, &texture1);
-
-    glBindTexture(GL_TEXTURE_2D, texture1);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    unsigned int diffuseMap, specularMap;
+    glGenTextures(1, &diffuseMap);
 
     int width, height, nrChannels;
     unsigned char *data = stbi_load("./container2.png", &width, &height, &nrChannels, 0);
+
     if (data)
     {
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        stbi_image_free(data);
     }
     else
     {
         std::cout << "Failed to load texture" << std::endl;
+        stbi_image_free(data);
     }
 
-    stbi_image_free(data);
+
+    glGenTextures(1, &specularMap);
+
+    data = stbi_load("./container2_specular.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glBindTexture(GL_TEXTURE_2D, specularMap);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+        stbi_image_free(data);
+    }
 
     CubeShader.use();
     CubeShader.setInt("material.diffuse", 0);
+    CubeShader.setInt("material.specular", 1);
 
     // 创建一个表示灯光源的立方体
     // 为灯创建一个专门的VAO
@@ -184,7 +207,9 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
+        glBindTexture(GL_TEXTURE_2D, diffuseMap);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, specularMap);
 
         float radius = 1.0f;
         float lightX = sin(glfwGetTime() * radius);
@@ -196,8 +221,8 @@ int main()
         CubeShader.use();
         // CubeShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
         // CubeShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        CubeShader.setVec3("material.specular", 1.0f, 0.5f, 0.31f);
-        CubeShader.setFloat("material.shininess", 32.0f);
+        //CubeShader.setVec3("material.specular", 1.0f, 0.5f, 0.31f);
+        CubeShader.setFloat("material.shininess", 64.0f);
         CubeShader.setVec3("light.position", lightPos);
         CubeShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
         CubeShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
