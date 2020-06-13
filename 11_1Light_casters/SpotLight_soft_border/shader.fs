@@ -14,6 +14,7 @@ struct Light {
     vec3 position; // 聚光的位置向量
     vec3 direction; // 聚光的方向向量
     float cutOff; // 切光角
+    float outerCutOff;
 
     vec3 ambient;
     vec3 diffuse;
@@ -41,28 +42,26 @@ void main()
 
     // 计算光源到片段与光线方向夹角 与 切光角比较 决定是否在聚光内部
     float theta = dot(lightDir, normalize(-light.direction));
+    float epsilon = light.cutOff - light.outerCutOff;
+    // 现在已有一个在聚光外为负 在内圆锥内大于1.0的强度值
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+    // 使用clamp函数将第一个参数约束在0.0到1.0之间
 
-    if(theta > light.cutOff)
-    {
-        // 执行光照计算
-        ambient = light.ambient * texture(material.diffuse, TexCoords).rgb;
+    ambient = light.ambient * texture(material.diffuse, TexCoords).rgb;
 
-        // vec3 lightDir = normalize(-light.direction);
-        // 光照计算需求一个从片段至光源的方向
-        // 但是我们输入的定向光为一个从光源出发的全局方向 因此需要取反改变方向
-        float diff = max(dot(norm, lightDir), 0.0);
-        diffuse = light.diffuse * diff * texture(material.diffuse, TexCoords).rgb;  
+    float diff = max(dot(norm, lightDir), 0.0);
+    diffuse = light.diffuse * diff * texture(material.diffuse, TexCoords).rgb;  
 
 
-        vec3 viewDir = normalize(viewPos - FragPos);
-        vec3 reflectDir = reflect(-lightDir, norm);
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-        specular = light.specular * spec * texture(material.specular, TexCoords).rgb;  
-        vec3 result = ambient + diffuse + specular;
-        FragColor = vec4(result, 1.0);
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    specular = light.specular * spec * texture(material.specular, TexCoords).rgb;  
 
-    }
-    else // 否则使用环境光，让场景在聚光外不至于完全黑暗
-        //FragColor = vec4(light.ambient * texture(material.diffuse, TexCoords).rgb), 1.0);
-        FragColor = vec4(light.ambient * vec3(texture(material.diffuse, TexCoords)), 1.0);
+    // 不对环境光产生影响让其总有一些光
+    diffuse *= intensity;
+    specular *= intensity;
+
+    vec3 result = ambient + diffuse + specular;
+    FragColor = vec4(result, 1.0);
 }
