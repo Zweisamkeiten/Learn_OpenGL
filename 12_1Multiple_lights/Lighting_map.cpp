@@ -28,7 +28,6 @@ Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 //glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 //glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f, 0.0f);
 
-float pitch = 0.0f, yaw = -90.0f;
 bool firstMouse = true;
 float lastX = SCR_WIDTH / 2, lastY = SCR_HEIGHT / 2;
 
